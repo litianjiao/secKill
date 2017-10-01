@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"github.com/astaxie/beego"
+	 "github.com/astaxie/beego"
 	"github.com/astaxie/beego/logs"
 	"secKill/SecProxy/service"
 	"strings"
@@ -29,13 +29,13 @@ func initConfig() (err error) {
 
 	redisMaxIdle, err := beego.AppConfig.Int("redis_max_idle")
 	if err != nil {
-		err = fmt.Errorf("init config failed, read redis_max_idle error:%v", err)
+		err = fmt.Errorf("init config failed, read redis_black_idle error:%v", err)
 		return
 	}
 
 	redisMaxActive, err := beego.AppConfig.Int("redis_max_active")
 	if err != nil {
-		err = fmt.Errorf("init config failed, read redis_max_active error:%v", err)
+		err = fmt.Errorf("init config failed, read redis_black_active error:%v", err)
 		return
 	}
 
@@ -72,7 +72,7 @@ func initConfig() (err error) {
 		secDealConf.EtcdConf.EtcdSecKeyPrefix = secDealConf.EtcdConf.EtcdSecKeyPrefix + "/"
 	}
 
-	secDealConf.EtcdConf.EtcdSecProductKey = fmt.Sprintf("%s%s", secKillConf.EtcdConf.EtcdSecKeyPrefix, productKey)
+	secDealConf.EtcdConf.EtcdSecProductKey = fmt.Sprintf("%s%s", secDealConf.EtcdConf.EtcdSecKeyPrefix, productKey)
 	secDealConf.LogPath = beego.AppConfig.String("log_path")
 	secDealConf.LogLevel = beego.AppConfig.String("log_level")
 

@@ -4,7 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"github.com/Masterminds/glide/path"
+
 	"github.com/astaxie/beego/logs"
 	etcd_client "github.com/coreos/etcd/clientv3"
 	"github.com/coreos/etcd/mvcc/mvccpb"
@@ -58,7 +58,7 @@ func initRedis() (err error) {
 */
 func initEtcd() (err error) {
 	cli, err := etcd_client.New(etcd_client.Config{
-		Endpoints:   []string(secDealConf.EtcdConf.EtcdAddr),
+		Endpoints:   []string{secDealConf.EtcdConf.EtcdAddr},
 		DialTimeout: time.Duration(secDealConf.EtcdConf.Timeout) * time.Second,
 	})
 	if err != nil {
@@ -113,7 +113,7 @@ func confLoader() (err error) {
 		}
 		logs.Debug("sec info conf is [%v]", secProductInfo)
 	}
-	updateSecProductInfo()
+	updateSecProductInfo(secProductInfo)
 	return
 }
 
@@ -141,7 +141,7 @@ func initSec() (err error) {
 		logs.Error("init load sec conf failed,err:%v", err)
 	}
 	service.InitService(secDealConf)
-
+	return nil
 }
 
 func initSecProductWatcher() {
