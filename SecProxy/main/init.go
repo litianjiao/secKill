@@ -140,14 +140,35 @@ func initSec() (err error) {
 	if err != nil {
 		logs.Error("init load sec conf failed,err:%v", err)
 	}
+	//逻辑层初始化
 	service.InitService(secDealConf)
+	initSecProductWatcher()
+	logs.Info("init sec succ")
 	return nil
 }
 
+/*
+******************************************************************
+  * @brief  open a goroutine for watching and update key
+  * @param
+  * @ret
+  * @author    Troy
+  * @date      2017/10/8 1:15
+******************************************************************
+*/
 func initSecProductWatcher() {
 	go watchSecProductKey(secDealConf.EtcdConf.EtcdSecProductKey)
 }
 
+/*
+******************************************************************
+  * @brief  watch sec product change and update
+  * @param
+  * @ret
+  * @author    Troy
+  * @date      2017/10/8 1:14
+******************************************************************
+*/
 func watchSecProductKey(key string) {
 
 	cli, err := etcd_client.New(etcd_client.Config{
@@ -192,11 +213,23 @@ func watchSecProductKey(key string) {
 	}
 }
 
+/*
+******************************************************************
+  * @brief  use RWLock for update productInfo  (防止线程竞争)
+  * @param
+  * @ret
+  * @author    Troy
+  * @date      2017/10/8 1:32
+******************************************************************
+*/
 func updateSecProductInfo(SecProductInfoConf []service.SecProductInfoConf) {
+	//通过临时map（引用类型）缓存新配置,此部分不加锁
 	var temp map[int]*service.SecProductInfoConf = make(map[int]*service.SecProductInfoConf)
+
 	for _, v := range SecProductInfoConf {
 		temp[v.ProductId] = &v
 	}
+	//如需改变，则在此使用读写锁来控制全局改动
 	secDealConf.RWSecProductLock.Lock()
 	secDealConf.SecProductInfoMap = temp
 	secDealConf.RWSecProductLock.Unlock()

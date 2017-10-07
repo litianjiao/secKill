@@ -21,7 +21,7 @@ func (p *DealController) SecInfo() {
 
 	result["code"] = 0
 	result["message"] = "success"
-
+//匿名函数
 	defer func() {
 		p.Data["json"] = result
 		p.ServeJSON()
@@ -34,6 +34,7 @@ func (p *DealController) SecInfo() {
 		logs.Error("invalid request, get product_id failed, err:%v", err)
 		return
 	}
+	//获取数据及错误码
 	data, code, err := service.SecInfo(productId)
 	if err != nil {
 		result["code"] = code
@@ -42,6 +43,7 @@ func (p *DealController) SecInfo() {
 		logs.Error("invalid request, get product_id failed, err:%v", err)
 		return
 	}
+	//如果成功则返回data
 	result["data"] = data
 
 }

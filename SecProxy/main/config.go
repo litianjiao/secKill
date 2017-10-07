@@ -8,6 +8,7 @@ import (
 	"strings"
 )
 
+//init product map
 var secDealConf = &service.SecDealConf{
 	SecProductInfoMap: make(map[int]*service.SecProductInfoConf, 1024),
 }

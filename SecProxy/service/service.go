@@ -13,7 +13,7 @@ func InitService(serviceConf *SecDealConf) {
 }
 
 func SecInfo(productId int) (data map[string]interface{}, code int, err error) {
-
+	//写锁互斥，读锁并发，此处用读锁提高性能
 	secDealConf.RWSecProductLock.RLock()
 	defer secDealConf.RWSecProductLock.RUnlock()
 
