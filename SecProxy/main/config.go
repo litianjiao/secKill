@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	 "github.com/astaxie/beego"
+	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/logs"
 	"secKill/SecProxy/service"
 	"strings"
@@ -15,18 +15,18 @@ var secDealConf = &service.SecDealConf{
 func initConfig() (err error) {
 	redisAddr := beego.AppConfig.String("redis_addr")
 	etcdAddr := beego.AppConfig.String("etcd_addr")
-
-	logs.Debug("read config succ, redis addr:%v", redisAddr)
-	logs.Debug("read config succ, etcd addr:%v", etcdAddr)
-
-	secDealConf.EtcdConf.EtcdAddr = etcdAddr
-	secDealConf.RedisConf.RedisAddr = redisAddr
+	//redisAddr := "127.0.0.1:6379"
+	//etcdAddr := "127.0.0.1:2379"
 
 	if len(redisAddr) == 0 || len(etcdAddr) == 0 {
 		err = fmt.Errorf("init config failed, redis[%s] or etcd[%s] config is null", redisAddr, etcdAddr)
 		return
 	}
+	logs.Debug("read config succ, redis addr:%v", redisAddr)
+	logs.Debug("read config succ, etcd addr:%v", etcdAddr)
 
+	secDealConf.EtcdConf.EtcdAddr = etcdAddr
+	secDealConf.RedisConf.RedisAddr = redisAddr
 	redisMaxIdle, err := beego.AppConfig.Int("redis_max_idle")
 	if err != nil {
 		err = fmt.Errorf("init config failed, read redis_black_idle error:%v", err)

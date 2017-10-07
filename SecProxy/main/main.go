@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"github.com/astaxie/beego"
 	_ "secKill/SecProxy/router"
 )
@@ -8,6 +9,7 @@ import (
 func main() {
 	err := initConfig()
 	if err != nil {
+		fmt.Errorf("init failed,err:%v", err)
 		panic(err)
 		return
 	}
